@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'myevent.apps.MyeventConfig',
     'myuser.apps.MyuserConfig',
     'rest_framework',
+    'rest_framework.authtoken'
 
 ]
 
