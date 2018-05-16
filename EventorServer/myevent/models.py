@@ -21,7 +21,7 @@ class Event(models.Model):
     title = models.CharField(max_length=100, null=False)
     date = models.DateTimeField(null=False)
     description = models.CharField(max_length=500)
-    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, null=False)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
     subject = models.ManyToManyField(Subject, through='SubjectRelation')
     # holder = models.ForeignKey(myuser, on_delete=models.DO_NOTHING)
     # participant = models.ManyToManyField(myuser, through='Participate')
