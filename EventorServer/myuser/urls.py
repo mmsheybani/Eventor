@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
-from myevent.views import HelloWorld
+from .views import SignUp, Login
 
 urlpatterns=[
-    path('signup/', HelloWorld.as_view(), name='helloWorld')
+    path('signup/', SignUp.as_view()),
+    path('login/',Login.as_view()),
 ]
