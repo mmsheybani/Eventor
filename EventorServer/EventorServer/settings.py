@@ -25,7 +25,7 @@ SECRET_KEY = '$7(hyca3zudksf^oto^xv=q&oa-k4-+n5qlqv7q=!b!838nq&f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['185.81.99.145']
 
 # Application definition
 AUTH_USER_MODEL='myuser.User'
