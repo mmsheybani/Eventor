@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
 from myevent.models import Event
 from myevent.serializers import EventSerilizers
 
@@ -13,3 +13,6 @@ class EventApi(CreateAPIView, RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerilizers
 
+class EventListApi(ListAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerilizers

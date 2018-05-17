@@ -28,6 +28,7 @@ class Login(APIView):
         if(user!=None):
             token=Token.objects.filter(user=user).first()
             return Response({
-                'token' : token.key
+                'token' : token.key,
+                'time' : user.date_joined
             })
         return Response("nok")
