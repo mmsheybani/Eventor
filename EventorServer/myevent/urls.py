@@ -1,9 +1,10 @@
 from django.urls import path, include
 
-from myevent.views import EventApi, EventListApi
+from myevent.views import GetEventApi,EventAPI
 
 urlpatterns = [
-    path('<int:pk>', EventApi.as_view()),
-    path('list', EventListApi.as_view()),
+    # path('', GetEventListApi.as_view()),
+    path('<int:pk>', GetEventApi.as_view()),
+    path('', EventAPI.as_view()),
 
 ]

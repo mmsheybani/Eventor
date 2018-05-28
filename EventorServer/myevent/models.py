@@ -1,6 +1,6 @@
 from django.db import models
 
-from myuser.models import User as myuser
+from myuser.models import User as myuser, User
 
 
 # Create your models here.
@@ -21,9 +21,9 @@ class Event(models.Model):
     title = models.CharField(max_length=100, null=False)
     date = models.DateTimeField(null=False)
     description = models.CharField(max_length=500)
-    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING, null=True, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.DO_NOTHING,null=False)
     subject = models.ManyToManyField(Subject, through='SubjectRelation')
-
+    holder=models.ForeignKey(User,on_delete=models.DO_NOTHING,null=False)
 
 class Ticket(models.Model):
     price = models.IntegerField(null=False)
