@@ -16,11 +16,11 @@ class GetEventSerializers(serializers.ModelSerializer):
         fields = ('title', 'date', 'description', 'location', 'subject','id','holder')
 class CreateEventSerializer(serializers.ModelSerializer):
     location=serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(),many=False)
-    holder=serializers.SerializerMethodField(source="get_holder")
-    def get_holder(self,obj):
-        print(1)
-        user=self.context.get('user')
-        return user
+    holder=serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    # def get_holder(self,obj):
+    #     print(1)
+    #     user=self.context.get('user')
+    #     return user
     class Meta:
         model = Event
         fields = ('title', 'date', 'description', 'location', 'subject','id','holder')

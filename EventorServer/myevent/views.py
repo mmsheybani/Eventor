@@ -20,7 +20,7 @@ class EventAPI(CreateAPIView, ListAPIView):
     queryset = Event.objects.all()
     serializer_class = CreateEventSerializer
     def create(self, request, *args, **kwargs):
-        serializer = CreateEventSerializer(data=request.data, context={'user': request.user})
+        serializer = CreateEventSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
