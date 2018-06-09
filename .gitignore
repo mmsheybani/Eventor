@@ -108,3 +108,5 @@ EventorServer/\.idea/
 EventorServer/myevent/migrations/
 
 EventorServer/myuser/migrations/
+
+\.DS_Store
