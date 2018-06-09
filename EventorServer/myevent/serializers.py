@@ -13,14 +13,16 @@ class GetEventSerializers(serializers.ModelSerializer):
     holder=UserSerializer(many=False,read_only=True)
     class Meta:
         model = Event
-        fields = ('title', 'date', 'description', 'location', 'subject','id','holder')
+        fields = ('id','title', 'date', 'description', 'location', 'subject','holder','header_image')
 class CreateEventSerializer(serializers.ModelSerializer):
     location=serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(),many=False)
-    holder=serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    # def get_holder(self,obj):
-    #     print(1)
-    #     user=self.context.get('user')
-    #     return user
+    #holder=serializers.SerializerMethodField(source="get_holder")
     class Meta:
         model = Event
-        fields = ('title', 'date', 'description', 'location', 'subject','id','holder')
+        fields = ('id','title', 'date', 'description', 'location', 'subject')
+    def create(self, validated_data):
+        # name = validated_data['name']
+        validated_data['holder']=self.context.get('user')
+        validated_data['header_image']=self.context.get('image')
+        event = Event.objects.create(**validated_data)
+        return event
