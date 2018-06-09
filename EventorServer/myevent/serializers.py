@@ -16,7 +16,7 @@ class GetEventSerializers(serializers.ModelSerializer):
         fields = ('id','title', 'date', 'description', 'location', 'subject','holder','header_image')
 class CreateEventSerializer(serializers.ModelSerializer):
     location=serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(),many=False)
-    #holder=serializers.SerializerMethodField(source="get_holder")
+
     class Meta:
         model = Event
         fields = ('id','title', 'date', 'description', 'location', 'subject')

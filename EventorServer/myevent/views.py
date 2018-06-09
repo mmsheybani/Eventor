@@ -28,11 +28,12 @@ class EventAPI(CreateAPIView, ListAPIView):
 
     def create(self, request, *args, **kwargs):
         saved_file_url=""
-        if request.FILES['image']:
-            myfile = request.FILES['image']
+        if request.FILES['header_image']:
+            myfile = request.FILES['header_image']
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
             saved_file_url=Backtory.upload_file(open(join(settings.MEDIA_ROOT,filename), 'rb'))
+            fs.delete(filename)
 
         instance = Event()
         serializer = CreateEventSerializer(instance, data=request.data, context={'user': request.user,'image':saved_file_url})
@@ -64,6 +65,8 @@ class GetEventApi(RetrieveAPIView):
 
 
 class LocationApi(CreateAPIView):
+    authentication_classes =(TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
     # def create(self, request, *args, **kwargs):
@@ -74,17 +77,5 @@ class LocationApi(CreateAPIView):
     #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class test(CreateAPIView):
-
-    def post(self, request, *args, **kwargs):
-        if request.FILES['image']:
-            myfile = request.FILES['image']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            fi=open(join(settings.MEDIA_ROOT,filename), 'rb')
-            saved_file_url=Backtory.upload_file(open(join(settings.MEDIA_ROOT,filename), 'rb'))
-            return Response({
-                'saved_file_url':saved_file_url
-            },status=status.HTTP_200_OK)
 
 

@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from myevent.views import GetEventApi, EventAPI, LocationApi, test
+from myevent.views import GetEventApi, EventAPI, LocationApi
 
 urlpatterns = [
     # path('', GetEventListApi.as_view()),
