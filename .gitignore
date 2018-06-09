@@ -104,3 +104,7 @@ venv.bak/
 .mypy_cache/
 
 EventorServer/\.idea/
+
+EventorServer/myevent/migrations/
+
+EventorServer/myuser/migrations/
