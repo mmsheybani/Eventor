@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,18 +24,21 @@ SECRET_KEY = '$7(hyca3zudksf^oto^xv=q&oa-k4-+n5qlqv7q=!b!838nq&f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['185.81.99.145','127.0.0.1']
+ALLOWED_HOSTS = ['185.81.99.145', '127.0.0.1']
 BACKTORY_API_SERVICE_PREFIX = 'http://api.backtory.com'
 BACKTORY_STORAGE_SERVICE_PREFIX = 'https://storage.backtory.com'
-BACKTORY_STORAGE_ID='5b165322e4b02c9079767224'
-backtory_master_access_token='9eaf7d24d0014e6286883c7a'
-X_BACKTORY_AUTHENTICATION_ID='5b0ab091e4b0988b2ce05a86'
-X_BACKTORY_AUTHENTICATION_KEY='5b0ab091e4b0322942dd0602'
-BACKTORY_REFRESH_TOKEN='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWIxODUyN2FlNGIwOWM4NGI1NTBmZWUzIiwiaXNfZ3Vlc3QiOmZhbHNlLCJ1c2VyX25hbWUiOiI1YjBhYjA5MWU0YjA5ODhiMmNlMDVhODYlJSVtbXNoZXliYW5pIiwic2NvcGUiOlsiY2xpZW50Il0sImF0aSI6IjViZTY2OWNhLTBkMTItNGIxNy1iM2Y0LTg2NzZmYzMzNTk1ZSIsImV4cCI6MjUyODMyMjk1MywianRpIjoiNzBlYmM4MTMtZWEyNy00N2E0LWEwZWMtMzczMzNhYjc2M2Y3IiwiY2xpZW50X2lkIjoiNWIwYWIwOTFlNGIwOTg4YjJjZTA1YTg2In0.uMDt4kYahBo9WMlPFcHGBEnK-tzV9Vca_wQkYzIATs95eDp451WaqKo8gDHQ6fTOGpjPiwNEWLoMddUvsaAyOemZ0GDE4U46YM1Ee_Rau7WzqTutE3M2HzsBYev1G_9xX49JtaeNyvftt5QjyS16VRxlDu2H-ABKuSpd9tgBKfb15uqfyzyiaKu6mCDUSaJHpJJ9s1HGr5giVrrGlSmBhIGAeJhCEqMaJZdVJO3Rlpgbfia1T1kleosjaKVImwK410Onzgf9OisoiaRb09oR0jdXFDGHqaakAR0RpU-ub9-k9K-44XRoGcVc0E3oTNGKicroXOblQQMSmN5Iy5LocQ'
-MEDIA_ROOT=os.environ.get('EVENTOR_MEDIA_ROOT',os.path.join(BASE_DIR,'media'))
+BACKTORY_STORAGE_ID = '5b165322e4b02c9079767224'
+backtory_master_access_token = '9eaf7d24d0014e6286883c7a'
+X_BACKTORY_AUTHENTICATION_ID = '5b0ab091e4b0988b2ce05a86'
+X_BACKTORY_AUTHENTICATION_KEY = '5b0ab091e4b0322942dd0602'
+BACKTORY_REFRESH_TOKEN = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWIxODUyN2FlNGIwOWM4NGI1NTBmZWUzIiwiaXNfZ3Vlc3QiOmZhbHNlLCJ1c2VyX25hbWUiOiI1YjBhYjA5MWU0YjA5ODhiMmNlMDVhODYlJSVtbXNoZXliYW5pIiwic2NvcGUiOlsiY2xpZW50Il0sImF0aSI6IjViZTY2OWNhLTBkMTItNGIxNy1iM2Y0LTg2NzZmYzMzNTk1ZSIsImV4cCI6MjUyODMyMjk1MywianRpIjoiNzBlYmM4MTMtZWEyNy00N2E0LWEwZWMtMzczMzNhYjc2M2Y3IiwiY2xpZW50X2lkIjoiNWIwYWIwOTFlNGIwOTg4YjJjZTA1YTg2In0.uMDt4kYahBo9WMlPFcHGBEnK-tzV9Vca_wQkYzIATs95eDp451WaqKo8gDHQ6fTOGpjPiwNEWLoMddUvsaAyOemZ0GDE4U46YM1Ee_Rau7WzqTutE3M2HzsBYev1G_9xX49JtaeNyvftt5QjyS16VRxlDu2H-ABKuSpd9tgBKfb15uqfyzyiaKu6mCDUSaJHpJJ9s1HGr5giVrrGlSmBhIGAeJhCEqMaJZdVJO3Rlpgbfia1T1kleosjaKVImwK410Onzgf9OisoiaRb09oR0jdXFDGHqaakAR0RpU-ub9-k9K-44XRoGcVc0E3oTNGKicroXOblQQMSmN5Iy5LocQ'
+MEDIA_ROOT = os.environ.get('EVENTOR_MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 # Application definition
-AUTH_USER_MODEL='myuser.User'
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIAL = True
+
+AUTH_USER_MODEL = 'myuser.User'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
     'myuser.apps.MyuserConfig',
     'rest_framework',
     'rest_framework.authtoken'
+    'corsheaders'
 
 ]
 
@@ -59,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 
 ]
 
