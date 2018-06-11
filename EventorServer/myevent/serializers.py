@@ -32,3 +32,9 @@ class CreateTicketSerializers(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ('price', 'count', 'event')
+
+class GetTicketSerializres(serializers.ModelSerializer):
+    event = GetEventSerializers(read_only=True, many=False)
+    class Meta:
+        model = Ticket
+        fields = ('price', 'count', 'event')

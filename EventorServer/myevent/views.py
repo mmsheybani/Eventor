@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from EventorServer import settings
 from myevent import Backtory
 from myevent.models import Event, Location, Ticket
-from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers
+from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers, GetTicketSerializres
 
 # Create your views here.
 
@@ -91,6 +91,17 @@ class TicketApi(CreateAPIView, ListAPIView):
         print(serializer.validated_data)
         s = serializer.create(serializer.validated_data)
         return Response(request.data,status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = GetTicketSerializres(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = GetTicketSerializres(queryset, many=True)
+        return Response(serializer.data)
 
         # instance = Ticket()
         # serializer = CreateTicketSerializers(instance, data=request.data)
