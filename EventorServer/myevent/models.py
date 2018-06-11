@@ -25,6 +25,8 @@ class Event(models.Model):
     subject = models.ManyToManyField(Subject, through='SubjectRelation')
     holder=models.ForeignKey(User,on_delete=models.DO_NOTHING,null=False)
     header_image=models.CharField(max_length=100)
+
+
 class Ticket(models.Model):
     price = models.IntegerField(null=False)
     count = models.IntegerField(null=False)

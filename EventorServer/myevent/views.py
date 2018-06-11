@@ -9,8 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from EventorServer import settings
 from myevent import Backtory
-from myevent.models import Event, Location
-from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer
+from myevent.models import Event, Location, Ticket
+from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers
 
 # Create your views here.
 
@@ -75,6 +75,30 @@ class LocationApi(CreateAPIView):
     #     self.perform_create(serializer)
     #     headers = self.get_success_headers(serializer.data)
     #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+
+class TicketApi(CreateAPIView, ListAPIView):
+    #authentication_classes = (TokenAuthentication,)
+    #permission_classes = (IsAuthenticated,)
+    queryset = Ticket.objects.all()
+    serializer_class = CreateTicketSerializers
+
+    def create(self, request, *args, **kwargs):
+        instance = Ticket()
+        serializer = CreateTicketSerializers(instance, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
+        s = serializer.create(serializer.validated_data)
+        return Response(request.data,status=status.HTTP_201_CREATED)
+
+        # instance = Ticket()
+        # serializer = CreateTicketSerializers(instance, data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # s = serializer.create(serializer.validated_data)
+        # ss = GetEventSerializers(instance=s)
+        # return Response(ss.data, status=status.HTTP_201_CREATED)
+
 
 
 

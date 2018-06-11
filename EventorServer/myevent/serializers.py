@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from myevent.models import Event, Location
+from myevent.models import Event, Location, Ticket
 from myuser.Serializers import UserSerializer
 from myuser.models import User
 
@@ -26,3 +26,9 @@ class CreateEventSerializer(serializers.ModelSerializer):
         validated_data['header_image']=self.context.get('image')
         event = Event.objects.create(**validated_data)
         return event
+
+class CreateTicketSerializers(serializers.ModelSerializer):
+    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all(), many=False)
+    class Meta:
+        model = Ticket
+        fields = ('price', 'count', 'event')
