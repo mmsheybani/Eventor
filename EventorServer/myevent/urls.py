@@ -9,6 +9,6 @@ urlpatterns = [
     path('<int:pk>', GetEventApi.as_view()),
     path('', EventAPI.as_view()),
     path('location/', LocationApi.as_view()),
-    path('Ticket/', TicketApi.as_view()),
+    path('ticket/', TicketApi.as_view()),
 
 ]

@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from EventorServer import settings
 from myevent import Backtory
 from myevent.models import Event, Location, Ticket
-from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers, GetTicketSerializres
+from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers, GetTicketSerializers
 
 # Create your views here.
 
@@ -38,7 +38,6 @@ class EventAPI(CreateAPIView, ListAPIView):
         instance = Event()
         serializer = CreateEventSerializer(instance, data=request.data, context={'user': request.user,'image':saved_file_url})
         serializer.is_valid(raise_exception=True)
-        print(serializer.validated_data)
         s = serializer.create(serializer.validated_data)
         ss = GetEventSerializers(instance=s)
         # self.perform_create(serializer)
@@ -90,17 +89,18 @@ class TicketApi(CreateAPIView, ListAPIView):
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
         s = serializer.create(serializer.validated_data)
-        return Response(request.data,status=status.HTTP_201_CREATED)
+        ss=GetTicketSerializers(instance=s)
+        return Response(ss.data,status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = GetTicketSerializres(page, many=True)
+            serializer = GetTicketSerializers(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        serializer = GetTicketSerializres(queryset, many=True)
+        serializer = GetTicketSerializers(queryset, many=True)
         return Response(serializer.data)
 
         # instance = Ticket()

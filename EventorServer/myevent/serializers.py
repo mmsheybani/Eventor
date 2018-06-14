@@ -11,9 +11,17 @@ class LocationSerializer(serializers.ModelSerializer):
 class GetEventSerializers(serializers.ModelSerializer):
     location=LocationSerializer(many=False,read_only=True)
     holder=UserSerializer(many=False,read_only=True)
+    tickets=serializers.SerializerMethodField()
+
     class Meta:
         model = Event
-        fields = ('id','title', 'date', 'description', 'location', 'subject','holder','header_image')
+        fields = ('id','title', 'date', 'description', 'location', 'subject','holder','header_image','tickets')
+    def get_tickets(self,obj):
+        ticket=Ticket.objects.filter(event=obj)
+        tickets=GetTicketSerializers(ticket,many=True)
+        # tickets=GetTicketSerializers(ticket,many=True)
+        # return tickets.data
+        return tickets.data
 class CreateEventSerializer(serializers.ModelSerializer):
     location=serializers.PrimaryKeyRelatedField(queryset=Location.objects.all(),many=False)
 
@@ -33,8 +41,8 @@ class CreateTicketSerializers(serializers.ModelSerializer):
         model = Ticket
         fields = ('price', 'count', 'event')
 
-class GetTicketSerializres(serializers.ModelSerializer):
-    event = GetEventSerializers(read_only=True, many=False)
+class GetTicketSerializers(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = ('price', 'count', 'event')
+        fields = ('id','price', 'count')
+
