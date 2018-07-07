@@ -31,7 +31,8 @@ class SignUp(ObtainAuthToken):
         user=serializer.create(serializer.data)
         token, created = Token.objects.get_or_create(user=user)
         return Response({
-            'token' : token.key
+            'token' : token.key,
+            'user': serializer.data
         })
 
 class Login(APIView):
@@ -40,9 +41,11 @@ class Login(APIView):
         password=request.data['password']
         user=User.objects.filter(username=username).filter(password=password).first()
         if(user!=None):
-            token=Token.objects.filter(user=user).first()
+            token =Token.objects.get_or_create(user=user)[0]
+            serializer=UserSerializer(instance=user)
             return Response({
                 'token' : token.key,
-                'time' : user.date_joined
+                'time' : user.date_joined,
+                'user': serializer.data
             })
         return Response("nok")

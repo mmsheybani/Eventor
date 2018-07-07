@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     # last_name=serializers.CharField(required=True)
     # email=serializers.CharField(required=True)
     # profile_picture = serializers.CharField(required=False)
-    # password=serializers.CharField(required=True)
+    password=serializers.CharField(required=True,write_only=True)
     class Meta:
         model=User
         fields=('username','first_name','last_name','email','password','phone_number')
