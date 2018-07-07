@@ -3,14 +3,15 @@ from os.path import join
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.authentication import TokenAuthentication,BasicAuthentication
+from rest_framework.authentication import TokenAuthentication, BasicAuthentication
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from EventorServer import settings
 from myevent import Backtory
 from myevent.models import Event, Location, Ticket
-from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers, GetTicketSerializers
+from myevent.serializers import GetEventSerializers, CreateEventSerializer, LocationSerializer, CreateTicketSerializers, \
+    GetTicketSerializers
 
 # Create your views here.
 
@@ -27,23 +28,23 @@ class EventAPI(CreateAPIView, ListAPIView):
     serializer_class = CreateEventSerializer
 
     def create(self, request, *args, **kwargs):
-        saved_file_url=""
+        saved_file_url = ""
         if request.FILES.get('header_image'):
             myfile = request.FILES['header_image']
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
-            saved_file_url=Backtory.upload_file(open(join(settings.MEDIA_ROOT,filename), 'rb'))
+            saved_file_url = Backtory.upload_file(open(join(settings.MEDIA_ROOT, filename), 'rb'))
             fs.delete(filename)
 
         instance = Event()
-        serializer = CreateEventSerializer(instance, data=request.data, context={'user': request.user,'image':saved_file_url})
+        serializer = CreateEventSerializer(instance, data=request.data,
+                                           context={'user': request.user, 'image': saved_file_url})
         serializer.is_valid(raise_exception=True)
         s = serializer.create(serializer.validated_data)
         ss = GetEventSerializers(instance=s)
         # self.perform_create(serializer)
         # headers = self.get_success_headers(serializer.data)
         return Response(ss.data, status=status.HTTP_201_CREATED)
-
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -64,7 +65,7 @@ class GetEventApi(RetrieveAPIView):
 
 
 class LocationApi(CreateAPIView):
-    authentication_classes =(TokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
@@ -76,10 +77,9 @@ class LocationApi(CreateAPIView):
     #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-
 class TicketApi(CreateAPIView, ListAPIView):
-    #authentication_classes = (TokenAuthentication,)
-    #permission_classes = (IsAuthenticated,)
+    # authentication_classes = (TokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Ticket.objects.all()
     serializer_class = CreateTicketSerializers
 
@@ -89,8 +89,8 @@ class TicketApi(CreateAPIView, ListAPIView):
         serializer.is_valid(raise_exception=True)
         print(serializer.validated_data)
         s = serializer.create(serializer.validated_data)
-        ss=GetTicketSerializers(instance=s)
-        return Response(ss.data,status=status.HTTP_201_CREATED)
+        ss = GetTicketSerializers(instance=s)
+        return Response(ss.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -111,6 +111,12 @@ class TicketApi(CreateAPIView, ListAPIView):
         # return Response(ss.data, status=status.HTTP_201_CREATED)
 
 
+class Get_holder_events(ListAPIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
-
-
+    def list(self, request, *args, **kwargs):
+        holder = request.user
+        events = Event.objects.filter(holder=holder)
+        serializer = GetEventSerializers(events, many=True)
+        return Response(serializer.data)
