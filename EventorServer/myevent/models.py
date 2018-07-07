@@ -9,13 +9,17 @@ from myuser.models import User as myuser, User
 class Subject(models.Model):
     title = models.CharField(max_length=50, null=False)
 
+    def __str__(self):
+        return self.title
 
 class Location(models.Model):
+    title=models.CharField(max_length=40)
     address = models.CharField(max_length=200, null=False)
     lat = models.FloatField()
     long = models.FloatField()
     capacity = models.IntegerField()
-
+    def __str__(self):
+        return self.title
 
 class Event(models.Model):
     title = models.CharField(max_length=100, null=False)
@@ -26,6 +30,8 @@ class Event(models.Model):
     holder=models.ForeignKey(User,on_delete=models.DO_NOTHING,null=False)
     header_image=models.CharField(max_length=100,default="")
 
+    def __str__(self):
+        return self.title
 
 class Ticket(models.Model):
     price = models.IntegerField(null=False)

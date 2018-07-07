@@ -3,7 +3,7 @@ from os.path import join
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication,BasicAuthentication
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
@@ -28,7 +28,7 @@ class EventAPI(CreateAPIView, ListAPIView):
 
     def create(self, request, *args, **kwargs):
         saved_file_url=""
-        if request.FILES['header_image']:
+        if request.FILES.get('header_image'):
             myfile = request.FILES['header_image']
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
@@ -44,9 +44,9 @@ class EventAPI(CreateAPIView, ListAPIView):
         # headers = self.get_success_headers(serializer.data)
         return Response(ss.data, status=status.HTTP_201_CREATED)
 
+
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = GetEventSerializers(page, many=True)
