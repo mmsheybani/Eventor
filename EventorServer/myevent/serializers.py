@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from myevent.models import Event, Location, Ticket
-from myuser.Serializers import UserSerializer
+from myuser.Serializers import CreateUserSerializer
 from myuser.models import User
 
 
@@ -12,7 +12,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class GetEventSerializers(serializers.ModelSerializer):
     location = LocationSerializer(many=False, read_only=True)
-    holder = UserSerializer(many=False, read_only=True)
+    holder = CreateUserSerializer(many=False, read_only=True)
     tickets = serializers.SerializerMethodField()
 
     class Meta:

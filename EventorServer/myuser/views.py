@@ -14,10 +14,10 @@ from rest_framework.generics import UpdateAPIView
 
 from EventorServer import settings
 from myevent import Backtory
-from myuser.Serializers import UserSerializer
+from myuser.Serializers import CreateUserSerializer, GetUserSerializer
 from myuser.models import User
 
-from EventorServer.myevent.models import Event
+# from EventorServer.myevent.models import Event
 
 
 class SignUp(ObtainAuthToken):
@@ -31,7 +31,7 @@ class SignUp(ObtainAuthToken):
             fs.delete(filename)
         print(saved_file_url)
         print(request.data)
-        serializer=UserSerializer(data=request.data,context={'profile_picture':saved_file_url})
+        serializer=CreateUserSerializer(data=request.data, context={'profile_picture':saved_file_url})
         serializer.is_valid(raise_exception=True)
         user=serializer.create(serializer.data)
         token, created = Token.objects.get_or_create(user=user)
@@ -47,7 +47,7 @@ class Login(APIView):
         user=User.objects.filter(username=username).filter(password=password).first()
         if(user!=None):
             token =Token.objects.get_or_create(user=user)[0]
-            serializer=UserSerializer(instance=user)
+            serializer=GetUserSerializer(instance=user)
             return Response({
                 'token' : token.key,
                 'time' : user.date_joined,
@@ -57,9 +57,11 @@ class Login(APIView):
 
 class update(UpdateAPIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
+    queryset = User.objects.all()
     def update(self, request, *args, **kwargs):
-        if request.user == User.objects.filter(id=kwargs.get("pk")).first().id:
+        print(kwargs.get("pk"))
+        if request.user == User.objects.filter(phone_number=(kwargs.get("pk"))).first():
             saved_file_url = ""
             # print(request.data)
             # json = request.data.get('user')
@@ -68,26 +70,20 @@ class update(UpdateAPIView):
             # json = jsonDecoder.decode(json)
             # print(json)
             # image = request.data.get('file')
-            if request.FILES.get("header_image"):
-                print(1)
-                myfile = request.FILES['header_image']
+            if request.FILES.get("profile_picture"):
+                myfile = request.FILES['profile_picture']
                 fs = FileSystemStorage()
                 filename = fs.save(myfile.name, myfile)
                 saved_file_url = Backtory.upload_file(open(join(settings.MEDIA_ROOT, filename), 'rb'))
-                print(saved_file_url)
                 fs.delete(filename)
             partial = kwargs.pop('partial', False)
             instance = self.get_object()
-            serializer = UserSerializer(instance, data=request.data, partial=partial, context={"image": saved_file_url})
-            serializer.is_valid(raise_exception=True)
-            # self.perform_update(serializer)
-            s = serializer.save(header_image=saved_file_url)
-            if getattr(instance, '_prefetched_objects_cache', None):
-                # If 'prefetch_related' has been applied to a queryset, we need to
-                # forcibly invalidate the prefetch cache on the instance.
-                instance._prefetched_objects_cache = {}
 
-                return Response(UserSerializer(instance=s).data)
-            return Response("Access Denied")
-        return Response("not authorized")
+            serializer = CreateUserSerializer(instance, data=request.data, partial=partial, context={"profile_picture": saved_file_url})
+            serializer.is_valid(raise_exception=True)
+            s = serializer.save(profile_picture=saved_file_url)
+            if getattr(instance, '_prefetched_objects_cache', None):
+                instance._prefetched_objects_cache = {}
+            return Response(GetUserSerializer(instance=s).data)
+        return Response("Access Denied")
 

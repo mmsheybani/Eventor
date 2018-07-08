@@ -54,8 +54,6 @@ class EventAPI(CreateAPIView, ListAPIView):
         serializer.is_valid(raise_exception=True)
         s = serializer.create(serializer.validated_data)
         ss = GetEventSerializers(instance=s)
-        # self.perform_create(serializer)
-        # headers = self.get_success_headers(serializer.data)
         return Response(ss.data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
@@ -84,22 +82,17 @@ class GetEventApi(RetrieveAPIView,UpdateAPIView):
                 # print(json)
                 # image = request.data.get('file')
                 if request.FILES.get("header_image"):
-                    print(1)
                     myfile = request.FILES['header_image']
                     fs = FileSystemStorage()
                     filename = fs.save(myfile.name, myfile)
                     saved_file_url = Backtory.upload_file(open(join(settings.MEDIA_ROOT, filename), 'rb'))
-                    print(saved_file_url)
                     fs.delete(filename)
                 partial = kwargs.pop('partial', False)
                 instance = self.get_object()
                 serializer = CreateEventSerializer(instance, data=request.data, partial=partial,context={"image":saved_file_url})
                 serializer.is_valid(raise_exception=True)
-                # self.perform_update(serializer)
                 s=serializer.save(header_image=saved_file_url)
                 if getattr(instance, '_prefetched_objects_cache', None):
-                    # If 'prefetch_related' has been applied to a queryset, we need to
-                    # forcibly invalidate the prefetch cache on the instance.
                     instance._prefetched_objects_cache = {}
 
                 return Response(GetEventSerializers(instance=s).data)
@@ -112,13 +105,6 @@ class LocationApi(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
 
 class TicketApi(CreateAPIView, ListAPIView):
     authentication_classes = (TokenAuthentication,)
@@ -146,12 +132,6 @@ class TicketApi(CreateAPIView, ListAPIView):
         serializer = GetTicketSerializers(queryset, many=True)
         return Response(serializer.data)
 
-        # instance = Ticket()
-        # serializer = CreateTicketSerializers(instance, data=request.data)
-        # serializer.is_valid(raise_exception=True)
-        # s = serializer.create(serializer.validated_data)
-        # ss = GetEventSerializers(instance=s)
-        # return Response(ss.data, status=status.HTTP_201_CREATED)
 
 
 class Get_holder_events(ListAPIView):
