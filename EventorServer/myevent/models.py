@@ -13,13 +13,13 @@ class Subject(models.Model):
         return self.title
 
 class Location(models.Model):
-    title=models.CharField(max_length=40)
+    # title=models.CharField(max_length=40)
     address = models.CharField(max_length=200, null=False)
     lat = models.FloatField()
     long = models.FloatField()
     capacity = models.IntegerField()
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
 class Event(models.Model):
     title = models.CharField(max_length=100, null=False)

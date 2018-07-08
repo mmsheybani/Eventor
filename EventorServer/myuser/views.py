@@ -18,7 +18,7 @@ from myuser.models import User
 class SignUp(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         saved_file_url = ""
-        if request.FILES['profile_picture']:
+        if request.FILES.get('profile_picture'):
             myfile = request.FILES['profile_picture']
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
