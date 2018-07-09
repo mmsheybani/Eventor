@@ -10,7 +10,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import UpdateAPIView
+from rest_framework.generics import UpdateAPIView,RetrieveAPIView
 
 from EventorServer import settings
 from myevent import Backtory
@@ -55,7 +55,7 @@ class Login(APIView):
             })
         return Response("nok")
 
-class update(UpdateAPIView):
+class UserApi(UpdateAPIView,RetrieveAPIView):
     authentication_classes = (TokenAuthentication,)
     # permission_classes = (IsAuthenticated,)
     queryset = User.objects.all()
@@ -87,3 +87,9 @@ class update(UpdateAPIView):
             return Response(GetUserSerializer(instance=s).data)
         return Response("Access Denied")
 
+    def get(self, request, *args, **kwargs):
+        if request.user != None:
+            s=GetUserSerializer(instance=request.user)
+            return Response(data={
+                "user":s.data
+            })
