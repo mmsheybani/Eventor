@@ -34,15 +34,12 @@ class EventAPI(CreateAPIView, ListAPIView):
     def create(self, request, *args, **kwargs):
         saved_file_url=""
         print(request.data)
-        json = request.data.get('user')
-        print(str(json))
-        jsonDecoder = JSONDecoder()
-        json = jsonDecoder.decode(json)
-        print(json)
-        image = request.data.get('file')
-        if image:
+        print(request.POST)
+        print(request.FILES)
+        print(request.data.get('files'))
+        if request.FILES.get('header_image'):
             print(1)
-            myfile = image
+            myfile = request.FILES.get('header_image')
             fs = FileSystemStorage()
             filename = fs.save(myfile.name, myfile)
             saved_file_url=Backtory.upload_file(open(join(settings.MEDIA_ROOT,filename), 'rb'))
@@ -50,7 +47,7 @@ class EventAPI(CreateAPIView, ListAPIView):
             fs.delete(filename)
 
         instance = Event()
-        serializer = CreateEventSerializer(instance, data=json, context={'user': request.user,'image':saved_file_url})
+        serializer = CreateEventSerializer(instance, data=request.data, context={'user': request.user,'image':saved_file_url})
         serializer.is_valid(raise_exception=True)
         s = serializer.create(serializer.validated_data)
         ss = GetEventSerializers(instance=s)

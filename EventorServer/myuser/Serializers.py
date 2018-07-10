@@ -9,7 +9,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
     # last_name=serializers.CharField(required=True)
     # email=serializers.CharField(required=True)
     # profile_picture = serializers.CharField(required=False)
-    password=serializers.CharField(required=True,write_only=True)
+    # password=serializers.CharField(required=True,write_only=True)
     class Meta:
         model=User
         fields=('username','first_name','last_name','email','password','phone_number')
@@ -25,7 +25,7 @@ class GetUserSerializer(serializers.ModelSerializer):
     # last_name=serializers.CharField(required=True)
     # email=serializers.CharField(required=True)
     # profile_picture = serializers.CharField(required=False)
-    password=serializers.CharField(required=True,write_only=True)
+    # password=serializers.CharField(required=True,write_only=True)
     class Meta:
         model=User
         fields=('username','first_name','last_name','email','password','phone_number','profile_picture')
@@ -33,4 +33,3 @@ class GetUserSerializer(serializers.ModelSerializer):
         validated_data['profile_picture']=self.context.get('profile_picture')
         user=User.objects.create(**validated_data)
         return user
-
